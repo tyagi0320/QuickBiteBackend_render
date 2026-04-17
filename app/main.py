@@ -8,6 +8,10 @@ import os
 app = FastAPI()
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
+@app.get("/")
+async def root():
+    return {"message": "API is live"}
+
 @app.middleware("http")
 async def add_auth_middleware(request: Request, call_next):
     return await auth_middleware(request, call_next)
