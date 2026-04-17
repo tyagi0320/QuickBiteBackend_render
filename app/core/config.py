@@ -12,7 +12,8 @@ class Settings(BaseSettings):
     SMTP_PORT: int
     EMAIL_ADDRESS: str      
     EMAIL_PASSWORD: str
-
+    FRONTEND_URL: str
+    
     class Config:
         env_file=".env"
 
