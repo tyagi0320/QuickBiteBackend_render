@@ -1,0 +1,2 @@
+1.py -m pip install "fastapi[standard]" uvicorn         
+2.

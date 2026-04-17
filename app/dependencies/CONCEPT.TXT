@@ -1,0 +1,1 @@
+Make an interceptor in axios to protect you admin routes. Based on this call your get,post,put,delete apis.

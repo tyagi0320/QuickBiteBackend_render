@@ -1,0 +1,26 @@
+# --- Environment & Secrets ---
+.venv/
+.env
+.env.*
+!.env.example
+
+# --- Project Dependencies (DO NOT IGNORE requirements.txt) ---
+# Removed requirements.txt from here so others can install your app
+
+# --- Python & System Garbage ---
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.DS_Store
+Thumbs.db
+
+# --- Database & Migrations ---
+# Only ignore the actual DB file, keep the 'alembic/' folder for migrations
+*.db
+*.sqlite3
+
+# --- Personal & Temporary Files ---
+uploads/
+installations/
+NOTES.txt
