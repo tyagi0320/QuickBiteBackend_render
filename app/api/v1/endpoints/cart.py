@@ -6,7 +6,8 @@ from app.schemas.cart import CartCreate, CartResponse
 from app.dependencies.auth import user_only
 from fastapi.security import HTTPBearer
 
-router = APIRouter(prefix="/cart", tags=["Cart"],dependencies=[Depends(HTTPBearer())])
+# router = APIRouter(prefix="/cart", tags=["Cart"],dependencies=[Depends(HTTPBearer())]) Remove dependencies when working in prod, this is for swagger specifically
+router = APIRouter(prefix="/cart", tags=["Cart"])
 
 @router.post("/add", response_model=CartResponse)
 def add_to_cart(
