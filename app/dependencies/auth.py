@@ -1,6 +1,9 @@
 from fastapi import Request, HTTPException, status, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-def get_current_user(request: Request):
+security = HTTPBearer()
+
+def get_current_user(request: Request,credentials: HTTPAuthorizationCredentials = Depends(security)):
     user = getattr(request.state, "user", None)
     if not user:
         raise HTTPException(
