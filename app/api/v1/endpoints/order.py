@@ -146,7 +146,7 @@ router = APIRouter(
 )
 
 # 1. POST /api/orders - Place order (User)
-@router.post("/", response_model=OrderResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=OrderResponse, status_code=status.HTTP_201_CREATED)
 def place_order(
     db: Session = Depends(get_db), 
     current_user = Depends(user_only)
@@ -185,7 +185,7 @@ def place_order(
     return new_order
 
 # 2. GET /api/orders - View orders
-@router.get("/", response_model=List[OrderResponse])
+@router.get("", response_model=List[OrderResponse])
 def get_orders(
     db: Session = Depends(get_db), 
     current_user = Depends(get_current_user)
