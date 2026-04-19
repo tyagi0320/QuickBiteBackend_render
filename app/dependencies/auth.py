@@ -1,48 +1,44 @@
-import axios from 'axios';
-import { TokenService } from './TokenService'; // ✅ already exists
+from fastapi import Request, HTTPException, status, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+security = HTTPBearer()
+# UPDATED: Added `credentials` dependency
+def get_current_user(request: Request,credentials: HTTPAuthorizationCredentials = Depends(security)):
+    user = getattr(request.state, "user", None)
 
-export const AuthService = {
-  async login(email: string, password: string) {
-    const res = await axios.post(`${BASE_URL}/login`, { email, password });
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated"
+        )
 
-    const data = res.data;
+    return user
 
-    // ✅ DEBUG
-    console.log("LOGIN RESPONSE:", data);
 
-    // ✅ FIX: use setToken (your actual method)
+def admin_only(user=Depends(get_current_user)):
+    if user["role"] != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin only access!"
+        )
+    return user
 
-    if (data.access_token) {
-      TokenService.setToken(data.access_token);
-    } 
-    else if (Array.isArray(data)) {
-      TokenService.setToken(data[0]); // access_token
-    } 
-    else {
-      console.warn("Unexpected login response format");
-    }
 
-    return data;
-  },
+def user_only(user=Depends(get_current_user)):
+    if user["role"] != "user":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User only access!"
+        )
+    return user
 
-  async register(userData: { email: string; password: string; name: string }) {
-    const res = await axios.post(`${BASE_URL}/register`, userData);
-    return res.data;
-  },
 
-  async verifyOtp(email: string, otp: string) {
-    const res = await axios.post(`${BASE_URL}/verify-otp`, null, {
-      params: { email, otp }
-    });
-    return res.data;
-  },
-
-  async resendOtp(email: string) {
-    const res = await axios.post(`${BASE_URL}/resend-otp`, null, {
-      params: { email }
-    });
-    return res.data;
-  }
-};
+def require_role(*roles):
+    def checker(user=Depends(get_current_user)):
+        if user["role"] not in roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Access forbidden"
+            )
+        return user
+    return checker
