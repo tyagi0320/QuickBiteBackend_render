@@ -22,6 +22,7 @@ import cloudinary.uploader
 from fastapi import UploadFile
 
 # These will be provided by your Cloudinary Dashboard
+print(f"DEBUG CLOUD NAME: {os.getenv('CLOUDINARY_CLOUD_NAME')}")
 cloudinary.config( 
   cloud_name = os.getenv("CLOUDINARY_CLOUD_NAME"), 
   api_key = os.getenv("CLOUDINARY_API_KEY"), 
